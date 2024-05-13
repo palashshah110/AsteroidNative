@@ -1,11 +1,17 @@
 import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, ImageBackground} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export default function AstroidDetails({navigation, route}) {
   const AsteroidData = route.params.AsteroidData;
+  const image = {
+    uri: 'https://w0.peakpx.com/wallpaper/107/636/HD-wallpaper-asteroid-espace-space.jpg',
+  };
   return (
-    <>
+    <ImageBackground
+      source={image}
+      resizeMode="cover"
+      style={{flex: 1, width: '100%', display: 'flex'}}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
         <Text style={styles.Goback}>Go Back</Text>
       </TouchableOpacity>
@@ -19,7 +25,7 @@ export default function AstroidDetails({navigation, route}) {
               </Text>
               <Text style={styles.text}>Id: {AsteroidData.id}</Text>
               <Text style={styles.text}>
-                Kilometer:{' '}
+                Kilometer:
                 {
                   AsteroidData.estimated_diameter.kilometers
                     .estimated_diameter_max
@@ -30,21 +36,21 @@ export default function AstroidDetails({navigation, route}) {
                 {AsteroidData.estimated_diameter.meters.estimated_diameter_max}
               </Text>
               <Text style={styles.text}>
-                Miles:{' '}
+                Miles:
                 {AsteroidData.estimated_diameter.miles.estimated_diameter_max}
               </Text>
             </View>
           </View>
         </View>
       </View>
-    </>
+    </ImageBackground>
   );
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   innerContainer: {
     flex: 1,
@@ -73,9 +79,10 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   Goback: {
-    color: '#000',
+    color: '#fff',
     fontSize: 20,
+    fontWeight: 'bold',
     marginLeft: 10,
-    marginTop: 10,
+    marginTop: 10
   },
 });

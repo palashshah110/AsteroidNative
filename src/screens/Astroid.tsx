@@ -8,19 +8,24 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
+  ImageBackground,
 } from 'react-native';
 
 export default function Astroid({navigation}) {
   const [AsteroidID, setAsteroidID] = useState<number>(0);
   const [Loading, setLoading] = useState<boolean>(false);
-
+  const handleChange = Id => {
+    if (/^[0-9]*$/.test(Id)) {
+      setAsteroidID(Id);
+    }
+  };
   const handleSubmit = async () => {
     if (AsteroidID === 0) {
       Alert.alert('Enter Asteroid ID');
       return;
     }
     if (AsteroidID.toString().length < 7) {
-      Alert.alert('Enter vaild Asteroid ID');
+      Alert.alert('Enter valid Asteroid ID');
       return;
     }
     setLoading(true);
@@ -32,14 +37,18 @@ export default function Astroid({navigation}) {
       const responseData = await response.json();
       if (responseData) {
         navigation.navigate('AsteroidDetails', {AsteroidData: responseData});
+      } else {
+        Alert.alert('Invalid Asteroid Data');
       }
     } catch (err) {
-      Alert.alert('Please Check Asteroid Id');
+      console.log(err);
+      Alert.alert('Invalid Asteroid ID');
     } finally {
-      setAsteroidID(0);
       setLoading(false);
+      setAsteroidID(0);
     }
   };
+
   const handleRandomClick = async () => {
     setLoading(true);
     try {
@@ -48,7 +57,6 @@ export default function Astroid({navigation}) {
         {method: 'GET'},
       );
       const response1 = await response.json();
-      console.log(response1);
       const randomID: {id: string}[] = response1?.near_earth_objects.map(
         (item: any) => ({id: item.id}),
       );
@@ -70,36 +78,55 @@ export default function Astroid({navigation}) {
     }
   };
 
-  if (Loading) {
-    return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
+  const image = {
+    uri: 'https://w0.peakpx.com/wallpaper/107/636/HD-wallpaper-asteroid-espace-space.jpg',
+  };
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          value={AsteroidID}
-          onChangeText={setAsteroidID}
-          placeholder="Enter Asteroid ID"
-          inputMode="tel"
-          maxLength={7}
-        />
-        <View style={styles.btncontainer}>
-          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-            <Text style={styles.submitButtonText}>Search</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.submitButton}
-            onPress={handleRandomClick}>
-            <Text style={styles.submitButtonText}>Random</Text>
-          </TouchableOpacity>
+    <ImageBackground
+      source={image}
+      resizeMode="cover"
+      style={{flex: 1, width: '100%', display: 'flex'}}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.inputContainer}>
+          <TextInput
+            inputMode="tel"
+            style={styles.input}
+            value={AsteroidID}
+            onChangeText={handleChange}
+            placeholder="Enter Asteroid ID"
+            maxLength={7}
+          />
+          <View style={styles.btncontainer}>
+            <TouchableOpacity
+              disabled={Loading || AsteroidID.toString().length < 7}
+              style={
+                Loading || AsteroidID.toString().length < 7
+                  ? styles.submitDisButton
+                  : styles.submitButton
+              }
+              onPress={handleSubmit}>
+              {Loading ? (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <ActivityIndicator size="large" />
+                </View>
+              ) : (
+                <Text style={styles.submitButtonText}>Search </Text>
+              )}
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.submitButton}
+              onPress={handleRandomClick}>
+              <Text style={styles.submitButtonText}>Random</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 
@@ -115,12 +142,13 @@ const styles = StyleSheet.create({
     height: 100,
   },
   input: {
+    backgroundColor: '#fff',
     borderWidth: 1,
     borderColor: 'black',
-    padding: 10,
-    borderRadius: 5,
+    padding: 15,
+    borderRadius: 10,
     flex: 1,
-    width: 300,
+    width: 250,
   },
   submitButton: {
     backgroundColor: 'blue',
@@ -128,6 +156,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 10,
     width: 100,
+  },
+  submitDisButton: {
+    backgroundColor: 'blue',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    width: 100,
+    opacity: 0.2,
   },
   submitButtonText: {
     color: 'white',

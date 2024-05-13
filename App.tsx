@@ -4,8 +4,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Astroid from './src/screens/Astroid';
 import {NavigationContainer} from '@react-navigation/native';
 import AsteroidDetails from './src/screens/AstroidDetails';
-const Stack = createStackNavigator();
 
+const Stack = createStackNavigator();
 function App(): React.JSX.Element {
   return (
     <NavigationContainer>
