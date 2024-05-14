@@ -11,34 +11,25 @@ import {
   ImageBackground,
 } from 'react-native';
 
-export default function Astroid({navigation}) {
+export default function Asteroid({navigation}) {
   const [AsteroidID, setAsteroidID] = useState<number>(0);
   const [Loading, setLoading] = useState<boolean>(false);
-  const handleChange = Id => {
+  const handleChange = (Id: any) => {
     if (/^[0-9]*$/.test(Id)) {
       setAsteroidID(Id);
     }
   };
   const handleSubmit = async () => {
-    if (AsteroidID === 0) {
-      Alert.alert('Enter Asteroid ID');
-      return;
-    }
-    if (AsteroidID.toString().length < 7) {
-      Alert.alert('Enter valid Asteroid ID');
-      return;
-    }
     setLoading(true);
     try {
       const response = await fetch(
         `https://api.nasa.gov/neo/rest/v1/neo/${AsteroidID}?api_key=6202jSPpG2GqkXh8LHBaPbumSZ1WVY8evbdOavNs`,
         {method: 'GET'},
       );
-      const responseData = await response.json();
-      if (responseData) {
-        navigation.navigate('AsteroidDetails', {AsteroidData: responseData});
-      } else {
-        Alert.alert('Invalid Asteroid Data');
+      if (response) {
+        navigation.navigate('AsteroidDetails', {
+          AsteroidData: await response.json(),
+        });
       }
     } catch (err) {
       console.log(err);
@@ -49,6 +40,7 @@ export default function Astroid({navigation}) {
     }
   };
 
+
   const handleRandomClick = async () => {
     setLoading(true);
     try {
@@ -57,12 +49,13 @@ export default function Astroid({navigation}) {
         {method: 'GET'},
       );
       const response1 = await response.json();
+
       const randomID: {id: string}[] = response1?.near_earth_objects.map(
         (item: any) => ({id: item.id}),
       );
       const ranid: number = Math.floor(Math.random() * randomID.length);
       const {id} = randomID[ranid];
-
+  
       const respons2 = await fetch(
         `https://api.nasa.gov/neo/rest/v1/neo/${id}?api_key=6202jSPpG2GqkXh8LHBaPbumSZ1WVY8evbdOavNs`,
         {method: 'GET'},
@@ -78,12 +71,11 @@ export default function Astroid({navigation}) {
     }
   };
 
-  const image = {
-    uri: 'https://w0.peakpx.com/wallpaper/107/636/HD-wallpaper-asteroid-espace-space.jpg',
-  };
   return (
     <ImageBackground
-      source={image}
+      source={{
+        uri: 'https://w0.peakpx.com/wallpaper/107/636/HD-wallpaper-asteroid-espace-space.jpg',
+      }}
       resizeMode="cover"
       style={{flex: 1, width: '100%', display: 'flex'}}>
       <SafeAreaView style={styles.container}>
@@ -104,7 +96,8 @@ export default function Astroid({navigation}) {
                   ? styles.submitDisButton
                   : styles.submitButton
               }
-              onPress={handleSubmit}>
+              onPress={handleSubmit}
+              testID="submitbtn">
               {Loading ? (
                 <View
                   style={{
@@ -115,12 +108,13 @@ export default function Astroid({navigation}) {
                   <ActivityIndicator size="large" />
                 </View>
               ) : (
-                <Text style={styles.submitButtonText}>Search </Text>
+                <Text style={styles.submitButtonText}>Search</Text>
               )}
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.submitButton}
-              onPress={handleRandomClick}>
+              onPress={handleRandomClick}
+              testID="randombtn">
               <Text style={styles.submitButtonText}>Random</Text>
             </TouchableOpacity>
           </View>

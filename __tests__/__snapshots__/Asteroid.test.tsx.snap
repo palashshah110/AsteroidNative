@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Asteroid Form Component should show an error when API  Random Btn give error 1`] = `"Error fetching random asteroid. Please try again."`;
+
+exports[`Asteroid Form Component should show an error when API  fetchdata give error 1`] = `"Invalid Asteroid ID"`;

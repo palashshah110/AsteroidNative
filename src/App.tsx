@@ -1,9 +1,9 @@
 import React from 'react';
 import 'react-native-gesture-handler';
 import {createStackNavigator} from '@react-navigation/stack';
-import Astroid from './src/screens/Astroid';
+import Asteroid from './screens/Asteroid.tsx';
 import {NavigationContainer} from '@react-navigation/native';
-import AsteroidDetails from './src/screens/AstroidDetails';
+import AsteroidDetails from './screens/AsteroidDetails.tsx';
 
 const Stack = createStackNavigator();
 function App(): React.JSX.Element {
@@ -12,7 +12,7 @@ function App(): React.JSX.Element {
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen
           name="Home"
-          component={Astroid}
+          component={Asteroid}
           options={{headerShown: false}}
         />
         <Stack.Screen
