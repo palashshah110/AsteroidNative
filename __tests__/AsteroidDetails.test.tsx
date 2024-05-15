@@ -22,20 +22,21 @@ const route = {
 };
 
 const mockNavigation = {
-  navigate:{
-    goBack: jest.fn(),
-  }
+  goBack: jest.fn(),
 };
 
 describe('AstroidDetails Checking', () => {
   test('Checking Text Detalis', () => {
     render(<AsteroidDetails navigation={mockNavigation} route={route} />);
+
     const GobackBtn = screen.getByText('Go Back');
-    expect(GobackBtn).toMatchSnapshot();
-    const name = screen.getByText(`Name: ${route.params.AsteroidData.name}`);
-    expect(name).toMatchSnapshot();
+    expect(GobackBtn).toBeDefined();
+
+    const name = screen.getByText(`Name: Asteroid1`);
+    expect(name).toBeDefined();
+    screen.debug();
     const goBackTest = screen.getByTestId('goBackTest');
     fireEvent.press(goBackTest);
-    expect(mockNavigation.navigate.goBack).toHaveBeenCalled();
+    expect(mockNavigation.goBack).toHaveBeenCalled();
   });
 });

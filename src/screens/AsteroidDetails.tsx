@@ -1,9 +1,34 @@
 import React from 'react';
-import {View, StyleSheet, Text, ImageBackground} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {
+  View,
+  StyleSheet,
+  Text,
+  ImageBackground,
+  TouchableOpacity,
+} from 'react-native';
+
 interface AsteroidDetailsProps {
   navigation: any;
-  route: any;
+  route: {
+    params: {
+      AsteroidData: {
+        name: string;
+        designation: string;
+        id: number;
+        estimated_diameter: {
+          kilometers?: {
+            estimated_diameter_max: number;
+          };
+          meters?: {
+            estimated_diameter_max: number;
+          };
+          miles?: {
+            estimated_diameter_max: number;
+          };
+        };
+      };
+    };
+  };
 }
 
 const AsteroidDetails: React.FC<AsteroidDetailsProps> = ({
