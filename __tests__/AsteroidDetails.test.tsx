@@ -34,7 +34,7 @@ describe('AstroidDetails Checking', () => {
 
     const name = screen.getByText(`Name: Asteroid1`);
     expect(name).toBeDefined();
-    screen.debug();
+
     const goBackTest = screen.getByTestId('goBackTest');
     fireEvent.press(goBackTest);
     expect(mockNavigation.goBack).toHaveBeenCalled();

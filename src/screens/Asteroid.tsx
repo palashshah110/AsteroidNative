@@ -19,6 +19,7 @@ export default function Asteroid({navigation}) {
       setAsteroidID(Id);
     }
   };
+
   const handleSubmit = async () => {
     setLoading(true);
     try {
@@ -26,20 +27,20 @@ export default function Asteroid({navigation}) {
         `https://api.nasa.gov/neo/rest/v1/neo/${AsteroidID}?api_key=6202jSPpG2GqkXh8LHBaPbumSZ1WVY8evbdOavNs`,
         {method: 'GET'},
       );
-      if (response) {
+      if (response.ok) {
         navigation.navigate('AsteroidDetails', {
           AsteroidData: await response.json(),
         });
+      } else {
+        Alert.alert('Invalid Asteroid ID');
       }
     } catch (err) {
-      console.log(err);
       Alert.alert('Invalid Asteroid ID');
     } finally {
       setLoading(false);
       setAsteroidID(0);
     }
   };
-
 
   const handleRandomClick = async () => {
     setLoading(true);
@@ -55,19 +56,21 @@ export default function Asteroid({navigation}) {
       );
       const ranid: number = Math.floor(Math.random() * randomID.length);
       const {id} = randomID[ranid];
-  
-      const respons2 = await fetch(
+
+      const response2 = await fetch(
         `https://api.nasa.gov/neo/rest/v1/neo/${id}?api_key=6202jSPpG2GqkXh8LHBaPbumSZ1WVY8evbdOavNs`,
         {method: 'GET'},
       );
-      const response2 = await respons2.json();
-      if (response2) {
-        navigation.navigate('AsteroidDetails', {AsteroidData: response2});
+      if (response2.ok) {
+        navigation.navigate('AsteroidDetails', {
+          AsteroidData: await response2.json(),
+        });
       }
     } catch (err) {
       Alert.alert('Error fetching random asteroid. Please try again.');
     } finally {
       setLoading(false);
+      setAsteroidID(0);
     }
   };
 
@@ -105,7 +108,7 @@ export default function Asteroid({navigation}) {
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}>
-                  <ActivityIndicator size="large" />
+                  <ActivityIndicator size="large" testID="loading-indicator" />
                 </View>
               ) : (
                 <Text style={styles.submitButtonText}>Search</Text>
